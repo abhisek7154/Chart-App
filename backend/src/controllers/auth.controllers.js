@@ -75,20 +75,28 @@ export const login = async (req, res) => {
         generateToken(user._id,res)
 
         res.status(200).json({
-            _id:User._id,
-            fullName:User.fullName,
-            email:User.email,
-            profilePic: User.profilePic,
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            profilePic: user.profilePic,
         });
     } catch (error){
 
-        console.log("Error in login controller" , )
+        console.log("Error in login controller" ,error.message);
+        res.status(300).json({message:"Internalk server error"})
     }
-
-
-
-}
+};
 
 export const logout = (req, res) => {
-    res.send("logout route");
+    try {
+        res.cookie("jwt" , "" , {maxAge: 0});
+        res.status(200).json({message: "logged out successfully"})
+    } catch (error){
+        console.log("Error in logout controller" , error.message);
+        res.json(500).json({ message: "Internal server error"})
+    }
+}
+
+export const updateProfile = async(req , res) => {
+    
 }
