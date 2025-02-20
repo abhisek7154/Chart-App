@@ -17,8 +17,8 @@ const PORT = process.env.PORT
 app.use(express.json()); // allow you to extract the json data ..
 app.use(cookieparser());
 app.use(cors({
-    origin: "http://localhost:5173/",
-    credentials:true
+    origin: "http://localhost:5173",
+    credentials: true,
 }))
 
 app.use("/api/auth" , authRouts);

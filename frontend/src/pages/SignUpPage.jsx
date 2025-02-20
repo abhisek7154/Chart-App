@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { User, Mail, Lock, Eye, EyeOff, Loader2, MessageSquare } from "lucide-react";
+import { User, Mail, Lock, Eye, EyeOff, Loader2, MessageSquare} from "lucide-react";
 import { Link } from "react-router-dom";
+import AuthImagePattern from "../components/AuthImagePattern";
+import toast from "react-hot-toast";
+
+
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,11 +15,44 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const { signup, isSigningUp } = useAuthStore(); // ✅ Use useAuthStore correctly
+  const { signup, isSigningUp } = useAuthStore();
+
+  const validateForm = () => {
+    if (!formData.fullName.trim()) {
+      toast.error("Full name is required");
+      return false;
+    }
+  
+    if (!formData.email.trim()) {
+      toast.error("Email is required");
+      return false;
+    }
+  
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      toast.error("Invalid email format");
+      return false;
+    }
+  
+    if (!formData.password) {
+      toast.error("Password is required");
+      return false;
+    }
+  
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return false;
+    }
+  
+    return true;
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signup(formData);
+    
+    const success = validateForm();
+
+    if(success === true) signup(formData) ;
   };
 
   return (
@@ -131,9 +168,11 @@ const SignUpPage = () => {
         </div>
       </div>
 
-      {/* Right Side */}
-      {/* If AuthImagePattern exists, import it, otherwise remove this section */}
-      {/* <AuthImagePattern title="Join our community" subtitle="Connect with friends, share moments, and stay in touch with your loved ones." /> */}
+      {/* right side */}
+      <AuthImagePattern
+      title="join our community"
+      subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
+        />
     </div>
   );
 };
